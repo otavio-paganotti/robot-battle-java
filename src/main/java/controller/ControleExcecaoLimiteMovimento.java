@@ -3,13 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package model;
+package controller;
 
 /**
  *
  * @author otavi
  */
-public abstract class ItensEspeciais {
-    public ItensEspeciais() {    
+public class ControleExcecaoLimiteMovimento {
+    public ControleExcecaoLimiteMovimento() {
+        
     }
 }

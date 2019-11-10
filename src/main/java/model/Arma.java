@@ -4,14 +4,18 @@
  * and open the template in the editor.
  */
 package model;
-import java.io.*;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 
 /**
  *
- * @author otavi
+ * @author otavi, kardek, jose
  */
 public class Arma {
     public Arma() {
+        
     }
     
     public boolean leArquivo() {
