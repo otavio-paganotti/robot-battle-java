@@ -9,6 +9,6 @@ package model;
  *
  * @author otavi
  */
-public class ArenaModel {
+public abstract class ItensEspeciais {
     
 }

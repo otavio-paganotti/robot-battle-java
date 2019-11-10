@@ -1,0 +1,9 @@
+ESPADA
+75
+1
+LANÇA
+45
+3
+ARCO
+25
+5

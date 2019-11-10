@@ -5,15 +5,11 @@
  */
 package view;
 
-import controller.ArenaController;
-
 /**
  *
  * @author otavi
  */
 public class main {
-  ArenaController arena = new ArenaController(10, 10, 10);
   public static void main(String[] args) {
-      
   }
 }

@@ -3,18 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package controller;
+package model;
 
 /**
  *
  * @author otavi
  */
-public class ArenaController {
+public class Arena {
     private int altura;
     private int largura;
     private int comprimento;
 
-    public ArenaController(int altura, int largura, int comprimento) {
+    public Arena(int altura, int largura, int comprimento) {
         this.altura = altura;
         this.largura = largura;
         this.comprimento = comprimento;
@@ -43,9 +43,4 @@ public class ArenaController {
     public void setComprimento(int comprimento) {
         this.comprimento = comprimento;
     }    
-    
-    public void main() {
-        ArenaController arena = new ArenaController(10, 10, 10);
-        System.out.println(arena.getAltura());
-    }
 }
