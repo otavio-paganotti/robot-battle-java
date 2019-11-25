@@ -5,7 +5,7 @@
  */
 package view;
 
-import model.*;
+import controller.ControleAcao;
 
 /**
  *
@@ -13,11 +13,7 @@ import model.*;
  */
 public class main {
   public static void main(String[] args) {
-      Arma arma = new Arma();
-      Bomba bomba = new Bomba();
-      Virus virus = new Virus();
-      System.out.println("Armas\n====================\n" + arma.leArquivo() + "\n");
-      System.out.println("Bombas\n====================\n" + bomba.leArquivo() + "\n");
-      System.out.println("Virus\n====================\n" + virus.leArquivo());
+      ControleAcao controle = new ControleAcao();
+      controle.InicializarJogo();
   }
 }

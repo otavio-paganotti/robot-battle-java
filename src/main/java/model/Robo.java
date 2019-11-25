@@ -10,18 +10,13 @@ package model;
  * @author otavi
  */
 public class Robo {
-    private String J1;
-    private String J2;
+    private String jogador;
     private Arma arma;
-    private Arena posicao;
     private int vida;
 
-    public Robo(Arma arma, Arena posicao, int vida) {
-        this.J1 = "Jogador 1";
-        this.J2 = "Jogador 2";
-        this.arma = arma;
-        this.posicao = posicao;
-        this.vida = vida;
+    public Robo(String jogador) {
+        this.jogador = jogador;
+        this.vida = 100;
     }
 
     public Arma getArma() {
@@ -32,12 +27,12 @@ public class Robo {
         this.arma = arma;
     }
 
-    public Arena getPosicao() {
-        return posicao;
+    public String getJogador() {
+        return jogador;
     }
 
-    public void setPosicao(Arena posicao) {
-        this.posicao = posicao;
+    public void setJogador(String jogadores) {
+        this.jogador = jogador;
     }
 
     public int getVida() {
@@ -47,6 +42,4 @@ public class Robo {
     public void setVida(int vida) {
         this.vida = vida;
     }
-    
-    
 }

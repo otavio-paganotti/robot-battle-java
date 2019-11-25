@@ -14,26 +14,18 @@ import java.io.IOException;
  * @author otavi
  */
 public class Virus {
+    private String[] virus;
+    
+    public Virus(String[] virus) {
+        this.virus = virus;
+    }
 
-    public Virus() {
+    public String[] getVirus() {
+        return virus;
+    }
+
+    public void setVirus(String[] virus) {
+        this.virus = virus;
     }
     
-    public boolean leArquivo() {
-        try {
-            // Le o arquivo
-            FileReader ler = new FileReader("Virus.txt");
-            BufferedReader reader = new BufferedReader(ler);  
-            String linha;
-            while( (linha = reader.readLine()) != null ){
-                System.out.println(linha);
-            }
-
-            // Imprime confirmacao
-            return true;
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
 }

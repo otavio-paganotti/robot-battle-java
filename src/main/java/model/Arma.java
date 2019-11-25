@@ -14,26 +14,18 @@ import java.io.IOException;
  * @author otavi, kardek, jose
  */
 public class Arma {
-    public Arma() {
-        
+    private String[][] armas;
+
+    public Arma(String[][] armas) {
+        this.armas = armas;
+    }
+
+    public String[][] getArmas() {
+        return armas;
+    }
+
+    public void setArmas(String[][] armas) {
+        this.armas = armas;
     }
     
-    public boolean leArquivo() {
-        try {
-            // Le o arquivo
-            FileReader ler = new FileReader("Armas.txt");
-            BufferedReader reader = new BufferedReader(ler);  
-            String linha;
-            while( (linha = reader.readLine()) != null ){
-                System.out.println(linha);
-            }
-
-            // Imprime confirmacao
-            return true;
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
 }
