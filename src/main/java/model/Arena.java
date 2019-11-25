@@ -5,9 +5,6 @@
  */
 package model;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 /**
  *
  * @author otavi
@@ -18,14 +15,12 @@ public class Arena {
     private int[][] coordenadas = new int[2][2];
     private int altura;
     private int largura;
-    private int comprimento;
     
     public Arena(int altura, int largura) {
         this.arena = new int[altura][largura];
         this.coordenadas = new int[2][2];
         this.altura = altura;
         this.largura = largura;
-        this.comprimento = comprimento;
     }
 
     public int getAltura() {
@@ -44,23 +39,20 @@ public class Arena {
         this.largura = largura;
     }
 
-    public int getComprimento() {
-        return comprimento;
-    }
-
-    public void setComprimento(int comprimento) {
-        this.comprimento = comprimento;
-    }
-
     public int[][] getCoordenadas() {
         return coordenadas;
     }
 
-    public void setCoordenadas(int[][] coordenadas) {
-        this.coordenadas = coordenadas;
+    public void setCoordenadas(int x, int y, int i) {
+        this.coordenadas[i][0] = x;
+        this.coordenadas[i][1] = y;
     }
 
     public int getElement(int i, int j) {
         return this.arena[i][j];
+    }
+
+    public void setElement(int i, int j, int value) {
+        this.arena[i][j] = value;
     }
 }

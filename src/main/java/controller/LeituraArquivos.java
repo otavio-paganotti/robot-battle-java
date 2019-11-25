@@ -8,47 +8,53 @@ package controller;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+
+import model.Arma;
+import model.Bomba;
+import model.Virus;
 
 /**
  *
  * @author otavi
  */
 public class LeituraArquivos {
-    private String[][] armas;
-    private String[] bombas;
-    private String[] virus;
+    private ArrayList<Arma> armasList;
+    private ArrayList<Bomba> bombasList;
+    private ArrayList<Virus> virusList;
 
-    public LeituraArquivos(String[][] armas, String[] bombas, String[] virus) {
-        this.armas = armas;
-        this.bombas = bombas;
-        this.virus = virus;
-    }
     public LeituraArquivos() {
-        
+        this.virusList = new ArrayList<Virus>();
+        this.bombasList = new ArrayList<Bomba>();
+        this.armasList = new ArrayList<Arma>();
+
+        this.leArquivo("Virus");
+        this.leArquivo("Bomba");
+        this.leArquivo("Armas");
     }
 
-    public String[][] getArmas() {
-        return armas;
+    public ArrayList<Arma> getArmas() {
+        return armasList;
     }
 
-    public void setArmas(String[][] armas) {
-        this.armas = armas;
+    public void setArmas(Arma arma) {
+        this.armasList.add(arma);
     }
 
-    public String[] getBombas() {
-        return bombas;
+    public ArrayList<Bomba> getBombas() {
+        return bombasList;
     }
 
-    public void setBombas(String[] bombas) {
-        this.bombas = bombas;
+    public void setBombas(Bomba bomba) {
+        this.bombasList.add(bomba);
     }
 
-    public String[] getVirus() {
-        return virus;
+    public ArrayList<Virus> getVirus() {
+        return virusList;
     }
 
-    public void setVirus(String[] virus) {
-        this.virus = virus;
+    public void setVirus(Virus virus) {
+        this.virusList.add(virus);
     }
     
     public boolean leArquivo(String arquivo) {
@@ -57,38 +63,34 @@ public class LeituraArquivos {
             FileReader ler = new FileReader(arquivo + ".txt");
             BufferedReader reader = new BufferedReader(ler);  
             String linha;
-            int i = 0;
             switch(arquivo) {
                 case "Bomba":
-                    i = 0;
-                    String[] bombas = new String[3];
+                    String bombas[] = new String[3];
                     while( (linha = reader.readLine()) != null ){
-                        bombas[i] = linha;
-                        i++;
+                        bombas = linha.split(" ");
+                        this.setBombas(new Bomba(bombas[0], bombas[1], bombas[2]));
+                        bombas = new String[3];
                     }
-                    this.setBombas(bombas);
                     break;
                 case "Virus":
-                    i = 0;
-                    String[] virus = new String[3];
+                    String virus[] = new String[3];
                     while( (linha = reader.readLine()) != null ){
-                        virus[i] = linha;
-                        i++;
+                        virus = linha.split(" ");
+                        this.setVirus(new Virus(virus[0], virus[1], virus[2]));
+                        
+                        virus = new String[3];
                     }
-                    this.setVirus(virus);
                     break;
                 case "Armas":
-                    String[][] armas = new String[3][3];
-                    for (i = 0; i < 3; i++) {
-                        for (int j = 0; j < 3; j++) {
-                            if ((linha = reader.readLine()) != null) {
-                                armas[i][j] = linha;
-                            }
-                        }
+                    String armas[] = new String[3];
+                    while( (linha = reader.readLine()) != null ){
+                        armas = linha.split(" ");
+                        this.setArmas(new Arma(armas[0], armas[1], armas[2]));
+                        armas = new String[3];
                     }
-                    this.setArmas(armas);
                     break;
             }
+            reader.close();
 
             // Imprime confirmacao
             return true;

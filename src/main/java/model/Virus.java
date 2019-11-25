@@ -5,27 +5,43 @@
  */
 package model;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-
 /**
  *
  * @author otavi
  */
 public class Virus {
-    private String[] virus;
+    private String nome;
+    private String dano;
+    private String raio;
     
-    public Virus(String[] virus) {
-        this.virus = virus;
+    public Virus(String nome, String dano, String raio) {
+        this.nome = nome;
+        this.dano = dano;
+        this.raio = raio;
+    }    
+
+    public String getNome() {
+        return nome;
     }
 
-    public String[] getVirus() {
-        return virus;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
-    public void setVirus(String[] virus) {
-        this.virus = virus;
+    public String getDano() {
+        return dano;
+    }
+
+    public void setDano(String dano) {
+        this.dano = dano;
+    }
+
+    public String getRaio() {
+        return raio;
+    }
+
+    public void setRaio(String raio) {
+        this.raio = raio;
     }
     
 }

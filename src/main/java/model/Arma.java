@@ -5,27 +5,43 @@
  */
 package model;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-
 /**
  *
  * @author otavi, kardek, jose
  */
 public class Arma {
-    private String[][] armas;
+    private String nome;
+    private String dano;
+    private String raio;
 
-    public Arma(String[][] armas) {
-        this.armas = armas;
+    public Arma(String nome, String dano, String raio) {
+        this.nome = nome;
+        this.dano = dano;
+        this.raio = raio;
     }
 
-    public String[][] getArmas() {
-        return armas;
+    public String getNome() {
+        return nome;
     }
 
-    public void setArmas(String[][] armas) {
-        this.armas = armas;
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getDano() {
+        return dano;
+    }
+
+    public void setDano(String dano) {
+        this.dano = dano;
+    }
+
+    public String getRaio() {
+        return raio;
+    }
+
+    public void setRaio(String raio) {
+        this.raio = raio;
     }
     
 }

@@ -5,28 +5,42 @@
  */
 package model;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-
 /**
  *
  * @author otavi
  */
 public class Bomba {
-    
-    private String[] bombas;
+    private String nome;
+    private String dano;
+    private String raio;
 
-    public Bomba(String[] bombas) {
-        this.bombas = bombas;
+    public Bomba(String nome, String dano, String raio) {
+        this.nome = nome;
+        this.dano = dano;
+        this.raio = raio;
     }
 
-    public String[] getBombas() {
-        return bombas;
+    public String getNome() {
+        return nome;
     }
 
-    public void setBombas(String[] bombas) {
-        this.bombas = bombas;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
-    
+
+    public String getDano() {
+        return dano;
+    }
+
+    public void setDano(String dano) {
+        this.dano = dano;
+    }
+
+    public String getRaio() {
+        return raio;
+    }
+
+    public void setRaio(String raio) {
+        this.raio = raio;
+    }
 }

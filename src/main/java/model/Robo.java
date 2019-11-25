@@ -31,7 +31,7 @@ public class Robo {
         return jogador;
     }
 
-    public void setJogador(String jogadores) {
+    public void setJogador(String jogador) {
         this.jogador = jogador;
     }
 
