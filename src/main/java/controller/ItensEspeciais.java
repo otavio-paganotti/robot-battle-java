@@ -3,9 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package model;
+package controller;
 
 import java.util.ArrayList;
+import model.Arma;
+import model.Bomba;
+import model.Virus;
 
 /**
  *
