@@ -19,6 +19,7 @@ public class ControleAcao {
     private Arena arena;
     private ArrayList<Robo> robo;
     private boolean turno;
+    private ItensEspeciais especiais;
 
     public ControleAcao(Arena arena, ArrayList<Robo> robo) {
         this.arena = arena;
@@ -54,19 +55,14 @@ public class ControleAcao {
         this.robo = robo;
     }
 
-    public boolean mover(boolean turno, int[][] coordenadas) {
+    public boolean mover(boolean turno, Arena arena) {
 
         /*
          * O robô irá se movimentar pela arena respeitando os limites da mesma. Se o
          * robô enviar seta p/ baixo, o robô se moverá para uma posição abaixo na
          * matriz, e assim sucessivamente. Dentre essas posições da matriz, poderá ter
          * armas, vírus e bombas pelo mapa, então dependendo de onde o personagem se
-         * mover, poderá ganhar uma arma nova, ou sofrer dano. . . . . . . . . . . . . .
-         * . . _________________________________ . . | . . . . a . . b . . | . . | . . 1
-         * a . . . v . . | . . | . . . . . . . . . v | . . | . . . . . . . 2 . a | . . |
-         * . . . . . . v . . . | . . _________________________________ . . . . . . . . .
-         * . . . . . .
-         *
+         * mover, poderá ganhar uma arma nova, ou sofrer dano
          * O jogo será realizado em turnos. Cada jogador, tem direito a 3 movimentos por
          * turno, a não ser que o jogador inimigo esteja em seu range. O jogador poderá
          * se movimentar em 4 direções distintas, e caso ultrapasse os limites da arena,
@@ -79,94 +75,157 @@ public class ControleAcao {
          * do outro jogador, poderá efetuar o ataque.
          */
 
-        Scanner scan = new Scanner(System.in);
+        
         int i = 0;
-
+        int x = turno == true ? 0 : 1;
+        int[][] coordenadas = arena.getCoordenadas();
+        boolean continua = true;
+        arena.setElement(coordenadas[x][0], coordenadas[x][1], 0);
+        Scanner scan = new Scanner(System.in);
+        
         do {
-
             String tecla = scan.nextLine();
-            switch (tecla) {
-            case "w":
-                System.out.println("Apertou a tecla W");
-                this.imprimirMatriz(this.arena);
-                break;
-            case "W":
-                System.out.println("Apertou a tecla w");
-                this.imprimirMatriz(this.arena);
-                break;
-            case "a":
-                System.out.println("Apertou a tecla a");
-                this.imprimirMatriz(this.arena);
-                break;
-            case "A":
-                System.out.println("Apertou a tecla A");
-                this.imprimirMatriz(this.arena);
-                break;
-            case "s":
-                System.out.println("Apertou a tecla s");
-                this.imprimirMatriz(this.arena);
-                break;
-            case "S":
-                System.out.println("Apertou a tecla S");
-                this.imprimirMatriz(this.arena);
-                break;
-            case "d":
-                System.out.println("Apertou a tecla d");
-                this.imprimirMatriz(this.arena);
-                break;
-            case "D":
-                System.out.println("Apertou a tecla D");
-                this.imprimirMatriz(this.arena);
-                break;
-            default:
-                System.out.println("Aperte as Teclas W A S D para se mover!!!");
+            try {
+                switch (tecla) {
+                    case "w":
+                        continua = this.checkColision(this.verificaOQueTem(arena, coordenadas[x][0] - 1, coordenadas[x][1]), x);
+                        if (this.verificaOQueTem(arena, coordenadas[x][0] - 1, coordenadas[x][1]) == 1 || this.verificaOQueTem(arena, coordenadas[x][0] - 1, coordenadas[x][1]) == 2) {
+                            coordenadas = this.colisao(this.verificaOQueTem(arena, coordenadas[x][0] - 1, coordenadas[x][1]), x);
+                        } else {
+                            if (coordenadas[x][0] - 1 < 0) {
+                                throw new UnsupportedOperationException("movimento para fora da arena");
+                            }
+                            coordenadas[x][0] = coordenadas[x][0] - 1;
+                        }
+                        break;
+                    case "s":
+                        continua = this.checkColision(this.verificaOQueTem(arena, coordenadas[x][0]  + 1, coordenadas[x][1]), x);
+                        if (this.verificaOQueTem(arena, coordenadas[x][0]  + 1, coordenadas[x][1]) == 1 || this.verificaOQueTem(arena, coordenadas[x][0]  + 1, coordenadas[x][1]) == 2) {
+                            coordenadas = this.colisao(this.verificaOQueTem(arena, coordenadas[x][0]  + 1, coordenadas[x][1]), x);
+                        } else {
+                            if (coordenadas[x][0] + 1 > this.arena.getY()) {
+                                throw new UnsupportedOperationException("movimento para fora da arena");
+                            }
+                            coordenadas[x][0] = coordenadas[x][0] + 1;
+                        }
+                        break;
+                    case "d":
+                        continua = this.checkColision(this.verificaOQueTem(arena, coordenadas[x][0], coordenadas[x][1] + 1), x);
+                        if (this.verificaOQueTem(arena, coordenadas[x][0], coordenadas[x][1] + 1) == 1 || this.verificaOQueTem(arena, coordenadas[x][0], coordenadas[x][1] + 1) == 2) {
+                            coordenadas = this.colisao(this.verificaOQueTem(arena, coordenadas[x][0], coordenadas[x][1] + 1), x);
+                        } else {
+                            if (coordenadas[x][1] + 1 > this.arena.getX()) {
+                                throw new UnsupportedOperationException("movimento para fora da arena");
+                            }
+                            coordenadas[x][1] = coordenadas[x][1] + 1;
+                        }
+                        break;
+                    case "a":
+                        continua = this.checkColision(this.verificaOQueTem(arena, coordenadas[x][0], coordenadas[x][1] - 1), x);
+                        if (this.verificaOQueTem(arena, coordenadas[x][0], coordenadas[x][1] - 1) == 1 || this.verificaOQueTem(arena, coordenadas[x][0], coordenadas[x][1] - 1) == 2) {
+                            coordenadas = this.colisao(this.verificaOQueTem(arena, coordenadas[x][0], coordenadas[x][1] - 1), x);
+                        } else {
+                            if (coordenadas[x][1] - 1 < 0) {
+                                throw new UnsupportedOperationException("movimento para fora da arena");
+                            }
+                            coordenadas[x][1] = coordenadas[x][1] - 1;
+                        }
+
+                        break;
+                    default:
+                        System.out.println("Aperte as Teclas W A S D para se mover!!!");
+                }
+            } catch (UnsupportedOperationException e) {
+                e.getMessage();
             }
             i++;
+            arena.setCoordenadas(coordenadas[x][0], coordenadas[x][1], x);
+            int player = x == 0 ? 1 : 2;
+            arena.setElement(coordenadas[x][0], coordenadas[x][1], player);
+            this.imprimirMatriz(arena);
+            
         } while (i < 1);
-
+        
         // scan.close();
-
-        this.trocaTurno();
-        return true;
-
+        
+        if (continua) {
+          this.trocaTurno();
+            return true;  
+        }
+        return false;
+    }
+    
+    public int verificaOQueTem(Arena arena, int i, int j) {
+        return arena.getElement(i, j);
     }
 
     public boolean atacar() {
         return true;
     }
 
-    public boolean pisouBomba() {
+    public boolean pisouBomba(int tipo, int player) {
+        Bomba b = this.especiais.getBomba().get((tipo % 10));
+        int vida = this.robo.get(player).getVida();
+        int dano = Integer.parseInt(b.getDano());
+        
+        this.robo.get(player).setVida((vida - dano));
+        System.out.println("\n\n O jogador " + this.robo.get(player).getJogador() + " pisou na Boma " + b.getNome() + " e perdeu " + b.getDano() + " de vida, restando " + (vida - dano) + " de vida.\n\n");
+        if (vida <= 0) {
+            System.out.println("\n\n Jogador " + this.robo.get(player).getJogador() + " perdeu!!!\n\n");
+            return false;
+        }
         return true;
     }
 
-    public boolean pisouVirus() {
+    public boolean pisouVirus(int tipo, int player) {
+        Virus v = this.especiais.getVirus().get((tipo % 10));
+        int vida = this.robo.get(player).getVida();
+        int dano = Integer.parseInt(v.getDano());
+        
+        this.robo.get(player).setVida(vida - dano);
+        System.out.println("\n\n O jogador " + this.robo.get(player).getJogador() + " pisou no Vírus " + v.getNome() + " e perdeu " + v.getDano() + " de vida, restando " + (vida - dano) + " de vida.\n\n");
+        if ((vida - dano) <= 0) {
+            System.out.println("\n\n Jogador " + this.robo.get(player).getJogador() + " perdeu!!! \n\n");
+            return false;
+        }
         return true;
     }
 
-    public boolean pisouArma() {
+    public boolean pisouArma(int tipo, int player) {
+        Scanner scan = new Scanner(System.in);
+        Arma a = this.especiais.getArmas().get((tipo % 10));
+        int r;
+        do {
+            System.out.println("\n\n Você pisou em cima da arma " + a.getNome() + ". Deseja equipá-la no lugar da sua " + this.robo.get(player).getArma().getNome() + "? (0) para Sim, (1) para Não." );
+            r = scan.nextInt();
+            System.out.println(r);
+        } while (r < 0 || r > 1);
+        
+        if (r == 0) {
+            this.robo.get(player).setArma(a);
+            System.out.println("\nArma trocada com sucesso!! \n");
+            return true;
+        }
+        
         return true;
     }
 
-    public boolean colisao() {
-        return true;
-    }
-
-    public boolean excederLimiteMovimento() {
-        // Terá uma classe própria para tratar os erros de limite de movimento
-        // ./ControleExcecaoLimiteMovimento.java
-        return true;
-    }
-
-    public boolean excedorLimiteArena() {
-        // Terá uma classe própria para tratar os erros de limite de arena
-        // ./ControleExcecaoLimiteArena.java
-        return true;
+    public int[][] colisao(int tipo, int player) {
+        int[][] coordenadas = new int[2][2];
+        Random rand = new Random();
+        int x = rand.nextInt(this.arena.getX());
+        int y = rand.nextInt(this.arena.getY());
+        
+        coordenadas[player][0] = x;
+        coordenadas[player][1] = y;
+        
+        return coordenadas;
     }
 
     public void imprimirMatriz(Arena arena) {
-        for(int i = 0; i < arena.getAltura(); i++) {
+        for(int i = 0; i < arena.getX(); i++) {
             System.out.printf("|");
-            for (int j = 0; j < arena.getLargura(); j++) {
+            for (int j = 0; j < arena.getY(); j++) {
                 System.out.printf(" %2d ", arena.getElement(i, j));
             }
             System.out.printf("|\n");
@@ -191,29 +250,48 @@ public class ControleAcao {
             int y = scan.nextInt();
             System.out.println("\n");
 
-            Arena arena = new Arena(x, y);
+            this.arena = new Arena(x, y);
 
             LeituraArquivos arquivos = new LeituraArquivos();
 
-            ItensEspeciais especiais = new ItensEspeciais(arquivos.getVirus(), arquivos.getBombas(), arquivos.getArmas());
+            this.especiais = new ItensEspeciais(arquivos.getVirus(), arquivos.getBombas(), arquivos.getArmas());
 
             System.out.println("Agora vamos criar os robôs: \n");
             System.out.println("============================\n");
             System.out.println("Qual o nome assustador do Robô nº 1? \n");
             String r1 = scan.next();
+            System.out.println("Com qual arma o " + r1 + " vai jogar? \n");
+            for(int i = 0; i < arquivos.getArmas().size(); i ++) {
+                System.out.printf("\n");
+                System.out.println("Nome: " + arquivos.getArmas().get(i).getNome());
+                System.out.println("Dano: " + arquivos.getArmas().get(i).getDano());
+                System.out.println("Raio: " + arquivos.getArmas().get(i).getRaio());
+                System.out.printf("Opção: " + i + "\n\n");
+            }
+            int a1 = scan.nextInt();
             System.out.println("Leeeeeegaaaaaaallll!!! \nAgora nos mostre o nome do Robô que enfrentará o grandioso " + r1 + " \n");
             String r2 = scan.next();
+            System.out.println("Com qual arma o " + r1 + " vai jogar? \n");
+            for(int i = 0; i < arquivos.getArmas().size(); i ++) {
+                System.out.printf("\n");
+                System.out.println("Nome: " + arquivos.getArmas().get(i).getNome());
+                System.out.println("Dano: " + arquivos.getArmas().get(i).getDano());
+                System.out.println("Raio: " + arquivos.getArmas().get(i).getRaio());
+                System.out.printf("Opção: " + i + "\n\n");
+            }
+            int a2 = scan.nextInt();
             System.out.println("Se preparem " + r1 + " e " + r2 + ", pois enfrentarão uma batalha até a morte!!!!");
 
             Robo robo1 = new Robo(r1);
             Robo robo2 = new Robo(r2);
+            robo1.setArma(arquivos.getArmas().get(a1));
+            robo2.setArma(arquivos.getArmas().get(a2));
 
             ArrayList<Robo> robos = new ArrayList<Robo>();
 
             robos.add(robo1);
             robos.add(robo2);
             
-            this.arena = arena;
             this.robo = robos;
             
             this.posicionarElementos(especiais);
@@ -237,26 +315,27 @@ public class ControleAcao {
         } else {
             this.setTurno(false);
         }
-        System.out.println("\n\n\nVez do jogador " + this.robo.get(valor).getJogador() + " \n\n\n");
-        this.mover(this.isTurno(), this.arena.getCoordenadas());
+        System.out.println("\n\n\nVez do jogador " + this.robo.get(valor).getJogador() + " - Vida: " + this.robo.get(valor).getVida() + " - Arma: " + this.robo.get(valor).getArma().getNome() + "\n\n\n");
+        this.mover(this.isTurno(), this.arena);
         return true;
     }
     
     public void trocaTurno() {
         this.setTurno(!this.isTurno());
-
-        this.mover(this.isTurno(), this.arena.getCoordenadas());
+        int vez = this.turno == true ? 0 : 1;
+        System.out.println("\n\n\nVez do jogador " + this.robo.get(vez).getJogador() + " - Vida: " + this.robo.get(vez).getVida() + " - Arma: " + this.robo.get(vez).getArma().getNome() + "\n\n\n");
+        this.mover(this.isTurno(), this.arena);
     }
     
     public void posicionarElementos(ItensEspeciais especiais) {
-        int densidade = (this.arena.getAltura() * this.arena.getLargura())/8;
+        int densidade = (this.arena.getX() * this.arena.getY())/8;
         Random rand = new Random();
 
         int i = 0;
 
         do {
-            int x = rand.nextInt(this.arena.getAltura());
-            int y = rand.nextInt(this.arena.getLargura());
+            int x = rand.nextInt(this.arena.getX());
+            int y = rand.nextInt(this.arena.getY());
 
             if (this.arena.getElement(x, y) == 0) {
                 int value = 0;
@@ -286,7 +365,7 @@ public class ControleAcao {
         } while(i < (densidade + this.robo.size()));
 
         for (int q = 0; q < 2; q++) {
-            System.out.println("Posição do jogador " + (q + 1) + " (x, y)");
+            System.out.println("Posição do jogador " + robo.get(q).getJogador() + " (x, y)");
             System.out.printf("|");
             for (int w = 0; w < 2; w++) {
                 System.out.printf(" %d ", this.arena.getCoordenadas()[q][w]);
@@ -294,5 +373,23 @@ public class ControleAcao {
             System.out.printf("|\n");
         }
         System.out.println("\n");
+    }
+    
+    public boolean checkColision(int tipo, int x) {
+        switch(tipo) {
+            case 10:
+                return this.pisouArma(tipo, x);
+            case 11:
+                return this.pisouArma(tipo, x);
+            case 12:
+                return this.pisouArma(tipo, x);
+            case 20:
+                return this.pisouBomba(tipo, x);
+            case 30:
+                return this.pisouVirus(tipo, x);
+            default:
+                break;
+        }
+        return true;
     }
 }

@@ -13,30 +13,30 @@ public class Arena {
 
     private int[][] arena;
     private int[][] coordenadas = new int[2][2];
-    private int altura;
-    private int largura;
+    private int x;
+    private int y;
     
-    public Arena(int altura, int largura) {
-        this.arena = new int[altura][largura];
+    public Arena(int x, int y) {
+        this.arena = new int[x][y];
         this.coordenadas = new int[2][2];
-        this.altura = altura;
-        this.largura = largura;
+        this.x = x;
+        this.y = y;
     }
 
-    public int getAltura() {
-        return altura;
+    public int getX() {
+        return x;
     }
 
-    public void setAltura(int altura) {
-        this.altura = altura;
+    public void setX(int x) {
+        this.x = x;
     }
 
-    public int getLargura() {
-        return largura;
+    public int getY() {
+        return y;
     }
 
-    public void setLargura(int largura) {
-        this.largura = largura;
+    public void setY(int y) {
+        this.y = y;
     }
 
     public int[][] getCoordenadas() {
