@@ -20,6 +20,9 @@ public class ControleAcao {
     private ArrayList<Robo> robo;
     private boolean turno;
     private ItensEspeciais especiais;
+    private ArrayList<Log> logs;
+    private boolean pBomba = false;
+    private boolean pVirus = false;
 
     public ControleAcao(Arena arena, ArrayList<Robo> robo) {
         this.arena = arena;
@@ -93,7 +96,7 @@ public class ControleAcao {
                             coordenadas = this.colisao(this.verificaOQueTem(arena, coordenadas[x][0] - 1, coordenadas[x][1]), x);
                         } else {
                             if (coordenadas[x][0] - 1 < 0) {
-                                throw new UnsupportedOperationException("movimento para fora da arena");
+                                throw new ArrayIndexOutOfBoundsException("movimento para fora da arena");
                             }
                             coordenadas[x][0] = coordenadas[x][0] - 1;
                         }
@@ -104,7 +107,7 @@ public class ControleAcao {
                             coordenadas = this.colisao(this.verificaOQueTem(arena, coordenadas[x][0]  + 1, coordenadas[x][1]), x);
                         } else {
                             if (coordenadas[x][0] + 1 > this.arena.getY()) {
-                                throw new UnsupportedOperationException("movimento para fora da arena");
+                                throw new ArrayIndexOutOfBoundsException("movimento para fora da arena");
                             }
                             coordenadas[x][0] = coordenadas[x][0] + 1;
                         }
@@ -115,7 +118,7 @@ public class ControleAcao {
                             coordenadas = this.colisao(this.verificaOQueTem(arena, coordenadas[x][0], coordenadas[x][1] + 1), x);
                         } else {
                             if (coordenadas[x][1] + 1 > this.arena.getX()) {
-                                throw new UnsupportedOperationException("movimento para fora da arena");
+                                throw new ArrayIndexOutOfBoundsException("movimento para fora da arena");
                             }
                             coordenadas[x][1] = coordenadas[x][1] + 1;
                         }
@@ -126,7 +129,7 @@ public class ControleAcao {
                             coordenadas = this.colisao(this.verificaOQueTem(arena, coordenadas[x][0], coordenadas[x][1] - 1), x);
                         } else {
                             if (coordenadas[x][1] - 1 < 0) {
-                                throw new UnsupportedOperationException("movimento para fora da arena");
+                                throw new ArrayIndexOutOfBoundsException("movimento para fora da arena");
                             }
                             coordenadas[x][1] = coordenadas[x][1] - 1;
                         }
@@ -135,13 +138,16 @@ public class ControleAcao {
                     default:
                         System.out.println("Aperte as Teclas W A S D para se mover!!!");
                 }
-            } catch (UnsupportedOperationException e) {
-                e.getMessage();
+            } catch (ArrayIndexOutOfBoundsException e) {
+                System.out.println("O jogador " + this.robo.get(x).getJogador() + " excedeu os limites da arena! Acabou de perder 20 de vida!\n");
+                System.out.println("O jogador " + this.robo.get(x).getJogador() + " foi realocado para sua posição anterior.");
+                this.robo.get(x).setVida((this.robo.get(x).getVida() - 20));
             }
             i++;
             arena.setCoordenadas(coordenadas[x][0], coordenadas[x][1], x);
             int player = x == 0 ? 1 : 2;
             arena.setElement(coordenadas[x][0], coordenadas[x][1], player);
+            this.logs.add(new Log(coordenadas, this.robo.get(x).getArma(), this.pBomba, this.pVirus, this.robo.get(x), arena.getCoordenadas()));
             this.imprimirMatriz(arena);
             
         } while (i < 1);
@@ -152,7 +158,37 @@ public class ControleAcao {
           this.trocaTurno();
             return true;  
         }
+        
+        this.imprimeSerializado();
+        
         return false;
+    }
+    
+    public void imprimeSerializado() {
+        Scanner scan = new Scanner(System.in);
+        
+        System.out.println("\n\n\n O jogo acabou, deseja ver os Logs do jogo? (0) Para sim, (1) Para não \n\n\n");
+        
+        int r = scan.nextInt();
+        
+        if (r == 0) {
+            for(int l = 0; l < this.logs.size(); l++) {
+                System.out.println("===============================================\n");
+                System.out.println("Round " + (l + 1) + ": \n");
+                System.out.println("Posição Inicial: \n");
+                System.out.println("| " + this.logs.get(l).getPosicao()[0][0] + " " + this.logs.get(l).getPosicao()[0][1] + " |\n");
+                System.out.println("| " + this.logs.get(l).getPosicao()[1][0] + " " + this.logs.get(l).getPosicao()[1][1] + " |\n");
+                System.out.println("Arma: " + this.logs.get(l).getArma().getNome() + "\n");
+                System.out.println("Pisou na bomba? " + this.logs.get(l).isPisouBomba() + "\n");
+                System.out.println("Pisou no vírus? " + this.logs.get(l).isPisouVirus() + "\n");
+                System.out.println("Vida do Robô " + this.logs.get(l).getRobo().getJogador() + ": " + this.logs.get(l).getRobo().getVida() + "\n");
+                System.out.println("Posição Final: \n");
+                System.out.println("| " + this.logs.get(l).getNovaPosicao()[0][0] + " " + this.logs.get(l).getNovaPosicao()[0][1] + " |\n");
+                System.out.println("| " + this.logs.get(l).getNovaPosicao()[1][0] + " " + this.logs.get(l).getNovaPosicao()[1][1] + " |\n");
+            }
+        }
+        
+        scan.close();
     }
     
     public int verificaOQueTem(Arena arena, int i, int j) {
@@ -300,6 +336,10 @@ public class ControleAcao {
             
             Random randomNum = new Random();
             int vez = randomNum.nextInt(2);
+            
+            this.logs = new ArrayList<Log>();
+            this.logs.add(new model.Log(this.arena.getCoordenadas(), this.robo.get(vez).getArma(), false, false, this.robo.get(vez), new int[2][2]));
+            
             this.iniciaTurno(vez);
             scan.close();
             return true;
@@ -376,6 +416,8 @@ public class ControleAcao {
     }
     
     public boolean checkColision(int tipo, int x) {
+        this.pBomba = false;
+        this.pVirus = false;
         switch(tipo) {
             case 10:
                 return this.pisouArma(tipo, x);
@@ -384,8 +426,10 @@ public class ControleAcao {
             case 12:
                 return this.pisouArma(tipo, x);
             case 20:
+                this.pBomba = true;
                 return this.pisouBomba(tipo, x);
             case 30:
+                this.pVirus = true;
                 return this.pisouVirus(tipo, x);
             default:
                 break;

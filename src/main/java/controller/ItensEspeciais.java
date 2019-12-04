@@ -19,7 +19,8 @@ public class ItensEspeciais {
     private ArrayList<Bomba> bomba;
     private ArrayList<Arma> armas;
 
-    public ItensEspeciais(ArrayList<Virus> virus, ArrayList<Bomba> bomba, ArrayList<Arma> armas) {
+    public ItensEspeciais(ArrayList<Virus> virus, 
+            ArrayList<Bomba> bomba, ArrayList<Arma> armas) {
         this.virus = virus;
         this.bomba = bomba;
         this.armas = armas;
